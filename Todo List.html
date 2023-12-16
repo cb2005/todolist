@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>To Do List</title>
+
+    <style>
+      .title{
+        display: grid;
+        grid-template-columns: 1225px;
+        text-align-last: center;
+        font-size: 60px;
+        margin-top: 20px;
+        margin-bottom: 40px;
+      }
+      body{
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .enter{
+        margin-bottom: 20px;
+      }
+      .inputname,
+      .inputdate,
+      .inputtime{
+        font-size: 30px;
+      }
+      .outputname,
+      .outputdate,
+      .outputtime{
+        font-size: 30px;
+      }
+      .subtit{
+        display: grid;
+        grid-template-columns: 525px 250px 2500px;
+        column-gap: 10px;
+      }
+      .subtittime,
+      .subtitdate{
+        font-size: 30px;
+      }
+      .div1,
+      .enter{
+        display: grid;
+        grid-template-columns: 525px 250px 250px 200px;
+        column-gap: 10px;
+        row-gap: 20px;
+      }
+      button{
+        font-weight: bolder;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 30px;
+        cursor: pointer;
+      }
+      .add{
+        background-color: rgb(122, 255, 122);
+      }
+      .delete{
+        background-color: rgb(255, 52, 52);
+      }
+    </style>
+  </head>
+  <body>
+    <p class="title">To Do List</p>
+    
+    <div class="subtit">
+      <div></div>
+      <div class="subtitdate">Date</div>
+      <div class="subtittime">Time</div>
+    </div>
+
+    <div class="enter">
+    <input placeholder="Todo name" class="inputname">
+    <input type="date" class="inputdate">
+    <input type="time" class="inputtime">
+    <button onclick="addtodo()" class="add">Add</button>
+    </div>
+
+    <div class="div1"></div>
+
+
+    <script>
+      //localStorage.removeItem('todolist')
+      let todolist = [];
+      if (JSON.parse(localStorage.getItem('todolist')) != null) {
+        todolist = JSON.parse(localStorage.getItem('todolist'))
+      }
+      updateList()
+
+      function updateList() {
+      localStorage.setItem('todolist', JSON.stringify(todolist))
+      let todohtml = '';
+        for (let i = 0; i < todolist.length; i++) {
+          const todoObject = todolist[i];
+          const name = todoObject.name;
+          const date = todoObject.date;
+          const time = todoObject.time
+          const html = 
+            `<div class="outputname">
+              ${name}
+            </div>
+            <div class="outputdate">
+              ${date}
+            </div>
+            <div class="outputtime">
+              ${time}
+            </div>
+            <button onclick="
+            todolist.splice(${i}, 1);
+            updateList()
+            " class="delete">Delete
+            </button>`
+            
+          todohtml = html + todohtml
+        }
+        document.querySelector('.div1').innerHTML = todohtml;
+      }
+
+      function addtodo() {
+        const name = document.querySelector('.inputname').value;
+        const date = document.querySelector('.inputdate').value;
+        const time = document.querySelector('.inputtime').value;
+        todolist.push({
+          name: name,
+          date: date,
+          time: time
+        });
+        document.querySelector('.inputname').value = '';
+        updateList()
+        
+      }
+    </script>
+  </body>
+</html>
